@@ -1,6 +1,6 @@
 name: Prueba Docker en GitHub Actions
 
-on: [push] # Se ejecuta cada vez que haces un push a tu repo
+on: [push]
 
 jobs:
   docker-test:
@@ -10,8 +10,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Levantar contenedor
-        run: docker-compose up -d
+        # Usamos docker run directamente en lugar de docker-compose
+        run: docker run -d --name mi-python python:3.12-slim tail -f /dev/null
 
       - name: Ejecutar acción dentro del contenedor
-        # Aquí hacemos lo mismo que hicimos antes con docker exec
-        run: docker exec $(docker ps -qf "name=mi-python") python -c "print('¡Hola desde GitHub Actions dentro de Docker!')"
+        # Verificamos que el contenedor existe y ejecutamos el comando
+        run: docker exec mi-python python -c "print('¡Hola desde GitHub Actions dentro de Docker!')"
