@@ -1,0 +1,17 @@
+name: Prueba Docker en GitHub Actions
+
+on: [push] # Se ejecuta cada vez que haces un push a tu repo
+
+jobs:
+  docker-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Levantar contenedor
+        run: docker-compose up -d
+
+      - name: Ejecutar acción dentro del contenedor
+        # Aquí hacemos lo mismo que hicimos antes con docker exec
+        run: docker exec $(docker ps -qf "name=mi-python") python -c "print('¡Hola desde GitHub Actions dentro de Docker!')"
